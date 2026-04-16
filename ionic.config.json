@@ -1,0 +1,7 @@
+{
+  "name": "minesweeper-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
