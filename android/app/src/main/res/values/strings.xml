@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Number Kaboom</string>
+    <string name="title_activity_main">Number Kaboom</string>
+    <string name="package_name">com.NumberKaboom.app</string>
+    <string name="custom_url_scheme">com.NumberKaboom.app</string>
+</resources>

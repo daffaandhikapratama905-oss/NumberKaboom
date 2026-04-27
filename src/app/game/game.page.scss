@@ -1,0 +1,191 @@
+.game-wrapper {
+  padding: 16px;
+  background: #f8fafc;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.difficulty-chips {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding-bottom: 8px;
+  
+  &::-webkit-scrollbar { display: none; }
+
+  ion-chip {
+    --background: white;
+    --color: #64748b;
+    font-weight: 600;
+    margin: 0;
+    border: 1px solid #e2e8f0;
+
+    &.active-chip {
+      --background: #077960;
+      --color: white;
+      border-color: #077960;
+    }
+  }
+}
+
+.stats-panel {
+  display: flex;
+  gap: 12px;
+  
+  .stat-box {
+    flex: 1;
+    background: white;
+    padding: 12px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+
+    .label {
+      display: block;
+      font-size: 0.7rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #1e293b;
+    }
+  }
+}
+
+.mode-selector {
+  display: flex;
+  background: #e2e8f0;
+  padding: 4px;
+  border-radius: 12px;
+  
+  button {
+    flex: 1;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    background: transparent;
+    color: #64748b;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+
+    &.active-mode {
+      background: white;
+      color: #077960;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    ion-icon { font-size: 1.2rem; }
+  }
+}
+
+.board-container {
+  background: #cbd5e1;
+  padding: 8px;
+  border-radius: 16px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden; 
+}
+
+.board-scroll {
+  width: 100%;
+  overflow: auto; 
+  display: flex;
+  justify-content: center;
+}
+
+.game-grid {
+  display: grid;
+  gap: 3px; 
+  background: #94a3b8;
+  padding: 3px;
+  border-radius: 4px;
+  width: fit-content; 
+}
+
+.game-cell {
+  aspect-ratio: 1/1;
+  min-width: 36px; 
+  background: #e2e8f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  font-size: 1.1rem;
+  border-radius: 2px;
+  transition: transform 0.1s;
+
+  &:active { transform: scale(0.9); }
+
+  &.is-revealed {
+    background: #ffffff;
+    &.is-mine { background: #fee2e2; }
+  }
+
+  .mine-number {
+    &[data-num="1"] { color: #2563eb; }
+    &[data-num="2"] { color: #16a34a; }
+    &[data-num="3"] { color: #dc2626; }
+    &[data-num="4"] { color: #1e1b4b; }
+    &[data-num="5"] { color: #7c2d12; }
+  }
+
+  .mine-icon { color: #dc2626; font-size: 1.3rem; }
+  .flag-icon { color: #f59e0b; font-size: 1.3rem; }
+}
+
+.game-actions {
+  margin-top: auto;
+  padding: 16px 0;
+
+  .btn-reset {
+    width: 100%;
+    background: linear-gradient(135deg, #077960 0%, #3eb4ac 100%);
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 10px 20px rgba(7, 121, 96, 0.2);
+
+    &:active { transform: scale(0.98); }
+    ion-icon { font-size: 1.4rem; }
+  }
+}
+
+  ion-toolbar {
+    --background: linear-gradient(135deg, #034134 0%, #077960 50%, #3eb4ac 100%);
+    --color: #ffffff;
+    
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+
+  ion-title {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+  }
+
+  ion-back-button {
+    --color: #ffffff !important;
+  }

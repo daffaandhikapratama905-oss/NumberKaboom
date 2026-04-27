@@ -1,0 +1,73 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Menu"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Number Kaboom</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="game-wrapper">
+    <div class="difficulty-chips">
+      <ion-chip *ngFor="let diff of ['easy', 'medium', 'hard', 'extreme']" 
+                [class.active-chip]="currentLevel === diff"
+                (click)="changeDifficulty(diff)">
+        <ion-label>{{ difficulties[diff].label }}</ion-label>
+      </ion-chip>
+    </div>
+
+    <div class="stats-panel">
+      <div class="stat-box">
+        <span class="label">Waktu</span>
+        <span class="value">{{ formatTime(timer) }}</span>
+      </div>
+      <div class="stat-box">
+        <span class="label">Bendera</span>
+        <span class="value">{{ getFlagsCount() }}/{{ difficulties[currentLevel].mines }}</span>
+      </div>
+    </div>
+
+    <div class="mode-selector">
+      <button [class.active-mode]="!isFlagMode" (click)="isFlagMode = false">
+        <ion-icon name="hammer"></ion-icon> Gali
+      </button>
+      <button [class.active-mode]="isFlagMode" (click)="isFlagMode = true">
+        <ion-icon name="flag"></ion-icon> Bendera
+      </button>
+    </div>
+
+    <div class="board-container">
+      <div class="board-scroll">
+        <div class="game-grid" 
+            [style.grid-template-columns]="'repeat(' + difficulties[currentLevel].cols + ', 1fr)'">
+          <ng-container *ngFor="let row of board; let r = index">
+            <div *ngFor="let cell of row; let c = index" 
+                  class="game-cell"
+                  [class.is-revealed]="cell.isRevealed"
+                  [class.is-mine]="cell.isRevealed && cell.isMine"
+                  (click)="handleCellClick(cell, r, c)">
+          
+              <ng-container *ngIf="cell.isRevealed">
+                <ion-icon *ngIf="cell.isMine" name="skull" class="mine-icon"></ion-icon>
+                <span *ngIf="!cell.isMine && cell.neighborMines > 0" 
+                      class="mine-number"
+                      [attr.data-num]="cell.neighborMines">
+                  {{ cell.neighborMines }}
+                </span>
+              </ng-container>
+
+              <ion-icon *ngIf="!cell.isRevealed && cell.isFlagged" name="flag" class="flag-icon"></ion-icon>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-actions">
+      <button class="btn-reset" (click)="resetGame()">
+        <ion-icon name="refresh-outline"></ion-icon> Permainan Baru
+      </button>
+    </div>
+  </div>
+</ion-content>

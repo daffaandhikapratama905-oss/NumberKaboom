@@ -68,3 +68,21 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Android specific
+/android/app/*.jks
+/android/app/*.keystore
+/android/.gradle/
+/android/build/
+/android/app/build/
+/keystore/
+*.jks
+
+# Keamanan & Kebersihan
+.gradle/
+local.properties
+Captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
