@@ -1,20 +1,54 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="home-wrapper">
+    
+    <div class="logo-container">
+      <div class="icon-circle">
+        <ion-icon name="game-controller"></ion-icon>
+      </div>
+      <h1>Number Kaboom</h1>
+      <p>Strategi dan Logika dalam Setiap Kotak</p>
+    </div>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <div class="menu-actions">
+      <button class="btn-play" routerLink="/game">
+        <ion-icon name="play"></ion-icon>
+        Mulai Bermain
+      </button>
+
+      <button class="btn-info" id="open-modal-guide">
+        <ion-icon name="help-circle-outline"></ion-icon>
+        Cara Bermain
+      </button>
+    </div>
+
+    <ion-modal trigger="open-modal-guide" #modal>
+      <ng-template>
+        <div class="modal-box">
+          <div class="modal-header">
+            <h2>Panduan</h2>
+            <ion-icon name="close-circle" (click)="modal.dismiss()"></ion-icon>
+          </div>
+
+          <div class="instruction-card">
+            <p><strong>Tujuan:</strong> Buka semua kotak yang tidak berisi bom tanpa meledakkannya.</p>
+          </div>
+
+          <ul class="guide-list">
+            <li><strong>Gali:</strong> Mode untuk membuka kotak.</li>
+            <li><strong>Bendera:</strong> Mode untuk menandai lokasi bom.</li>
+            <li><strong>Angka:</strong> Menunjukkan jumlah bom di sekitar kotak.</li>
+          </ul>
+
+          <button class="btn-close-modal" (click)="modal.dismiss()">
+            Saya Mengerti
+          </button>
+        </div>
+      </ng-template>
+    </ion-modal>
+
+    <div class="home-footer">
+      <p>UNIVERSITY PROJECT - 2026</p>
+    </div>
+
   </div>
 </ion-content>

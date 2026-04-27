@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'minesweeper-app',
+  appId: 'com.NumberKaboom.app',
+  appName: 'Number Kaboom',
   webDir: 'www'
 };
 
