@@ -16,11 +16,11 @@ interface Cell {
 })
 export class GamePage implements OnInit {
   difficulties: any = {
-    easy: { rows: 10, cols: 10, mines: 10, label: 'Mudah' },
-    medium: { rows: 12, cols: 12, mines: 20, label: 'Menengah' }, // Bom dikurangi dari 30 ke 20
-    hard: { rows: 14, cols: 14, mines: 35, label: 'Sulit' },    // Bom dikurangi dari 50 ke 35
-    extreme: { rows: 16, cols: 16, mines: 50, label: 'Ekstrem' } // Grid disesuaikan, bom 50 agar tetap menantang tapi adil
-  };
+    easy: { rows: 6, cols: 6, mines: 8, label: 'Mudah' },
+    medium: { rows: 8, cols: 7, mines: 12, label: 'Menengah' },
+    hard: { rows: 10, cols: 8, mines: 20, label: 'Sulit' },
+    extreme: { rows: 12, cols: 9, mines: 30, label: 'Ekstrem' }
+};
   
   currentLevel: string = 'easy';
   board: Cell[][] = [];
