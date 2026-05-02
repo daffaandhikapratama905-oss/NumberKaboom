@@ -40,8 +40,10 @@
     <div class="board-container">
       <div class="board-scroll">
         <div class="game-grid" 
-            [style.grid-template-columns]="'repeat(' + difficulties[currentLevel].cols + ', 1fr)'">
+             [style.grid-template-columns]="'repeat(' + difficulties[currentLevel].cols + ', 1fr)'">
+          
           <ng-container *ngFor="let row of board; let r = index">
+            
             <div *ngFor="let cell of row; let c = index" 
                   class="game-cell"
                   [class.is-revealed]="cell.isRevealed"
