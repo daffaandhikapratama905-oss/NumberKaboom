@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular'; 
+import { AlertController, NavController } from '@ionic/angular';
 
 interface Cell {
   isMine: boolean;
@@ -20,7 +20,7 @@ export class GamePage implements OnInit {
     medium: { rows: 8, cols: 7, mines: 12, label: 'Menengah' },
     hard: { rows: 10, cols: 8, mines: 20, label: 'Sulit' },
     extreme: { rows: 12, cols: 9, mines: 30, label: 'Ekstrem' }
-};
+  };
   
   currentLevel: string = 'easy';
   board: Cell[][] = [];
@@ -31,7 +31,10 @@ export class GamePage implements OnInit {
   isFirstClick: boolean = true;
   isFlagMode: boolean = false;
 
-  constructor(private alertCtrl: AlertController) {}
+  constructor(
+    private alertCtrl: AlertController,
+    private navCtrl: NavController
+  ) {}
   
   ngOnInit() {
     this.resetGame();
@@ -48,24 +51,68 @@ export class GamePage implements OnInit {
     this.gameOver = false;
     this.gameWon = false;
     this.isFirstClick = true;
-    this.createBoard();
+    this.initBoard();
   }
 
-  createBoard() {
-    const config = this.difficulties[this.currentLevel];
-    this.board = Array.from({ length: config.rows }, () => 
-      Array.from({ length: config.cols }, () => ({
-        isMine: false, isRevealed: false, isFlagged: false, neighborMines: 0
+  initBoard() {
+    const { rows, cols } = this.difficulties[this.currentLevel];
+    this.board = Array.from({ length: rows }, () => 
+      Array.from({ length: cols }, () => ({
+        isMine: false,
+        isRevealed: false,
+        isFlagged: false,
+        neighborMines: 0
       }))
     );
+  }
 
-    let planted = 0;
-    while (planted < config.mines) {
-      const r = Math.floor(Math.random() * config.rows);
-      const c = Math.floor(Math.random() * config.cols);
-      if (!this.board[r][c].isMine) {
+  handleCellClick(cell: Cell, r: number, c: number) {
+    if (this.gameOver || this.gameWon || cell.isRevealed) return;
+
+    if (this.isFlagMode) {
+      cell.isFlagged = !cell.isFlagged;
+      return;
+    }
+
+    if (cell.isFlagged) return;
+
+    if (this.isFirstClick) {
+      this.placeMines(r, c);
+      this.startTimer();
+      this.isFirstClick = false;
+    }
+
+    if (cell.isMine) {
+      this.endGame(false);
+    } else {
+      this.revealCell(r, c);
+      if (this.checkWin()) this.endGame(true);
+    }
+  }
+
+  revealCell(r: number, c: number) {
+    const cell = this.board[r]?.[c];
+    if (!cell || cell.isRevealed || cell.isFlagged) return;
+
+    cell.isRevealed = true;
+    if (cell.neighborMines === 0 && !cell.isMine) {
+      for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+          this.revealCell(r + i, c + j);
+        }
+      }
+    }
+  }
+
+  placeMines(safeR: number, safeC: number) {
+    const { rows, cols, mines } = this.difficulties[this.currentLevel];
+    let placed = 0;
+    while (placed < mines) {
+      const r = Math.floor(Math.random() * rows);
+      const c = Math.floor(Math.random() * cols);
+      if (!this.board[r][c].isMine && (Math.abs(r - safeR) > 1 || Math.abs(c - safeC) > 1)) {
         this.board[r][c].isMine = true;
-        planted++;
+        placed++;
       }
     }
     this.calculateNeighbors();
@@ -87,85 +134,44 @@ export class GamePage implements OnInit {
     });
   }
 
-  handleCellClick(cell: Cell, r: number, c: number) {
-    if (this.gameOver || this.gameWon || cell.isRevealed || (this.isFlagMode && !cell.isRevealed)) {
-      if (this.isFlagMode) {
-        cell.isFlagged = !cell.isFlagged;
-      }
-      return;
+  async endGame(win: boolean) {
+    this.stopTimer();
+    this.gameOver = !win;
+    this.gameWon = win;
+
+    if (!win) {
+      this.board.forEach(row => row.forEach(c => { if (c.isMine) c.isRevealed = true; }));
     }
 
-    if (this.timer === 0) {
-      this.startTimer();
-    }
-
-    if (this.isFirstClick) {
-      this.isFirstClick = false;
-      this.ensureSafeStart(r, c);
-      cell = this.board[r][c]; 
-    }
-
-    cell.isRevealed = true;
-    if (cell.isMine) {
-      this.endGame(false);
-    } else if (cell.neighborMines === 0) {
-      this.revealEmpty(r, c);
-    }
-    this.checkWin();
-  }
-
-  ensureSafeStart(r: number, c: number) {
-    const config = this.difficulties[this.currentLevel];
-    const safeZone: {r: number, c: number}[] = [];
-
-    for (let i = -1; i <= 1; i++) {
-      for (let j = -1; j <= 1; j++) {
-        if (this.board[r + i]?.[c + j]) {
-          safeZone.push({ r: r + i, c: c + j });
+    const alert = await this.alertCtrl.create({
+      header: win ? 'Yatta, Selamat kamu berhasil!' : 'Yahh, Game Over coba lagi deh',
+      subHeader: win ? 'Kamu berhasil membersihkan semua bom' : 'Waduh, kamu menginjak bom',
+      message: `Waktu kamu: ${this.formatTime(this.timer)}`,
+      backdropDismiss: false,
+      cssClass: win ? 'game-alert-win' : 'game-alert-lose',
+      buttons: [
+        {
+          text: 'Menu Utama',
+          handler: () => { this.navCtrl.navigateBack('/home'); }
+        },
+        {
+          text: 'Main Lagi',
+          handler: () => { this.resetGame(); }
         }
-      }
-    }
-
-    safeZone.forEach(zone => {
-      if (this.board[zone.r][zone.c].isMine) {
-        this.board[zone.r][zone.c].isMine = false;
-        
-        let moved = false;
-        while (!moved) {
-          const newR = Math.floor(Math.random() * config.rows);
-          const newC = Math.floor(Math.random() * config.cols);
-          
-          const inSafeZone = safeZone.some(sz => sz.r === newR && sz.c === newC);
-          if (!this.board[newR][newC].isMine && !inSafeZone) {
-            this.board[newR][newC].isMine = true;
-            moved = true;
-          }
-        }
-      }
+      ]
     });
-
-    this.calculateNeighbors();
+    await alert.present();
   }
 
-  revealEmpty(r: number, c: number) {
-    for (let i = -1; i <= 1; i++) {
-      for (let j = -1; j <= 1; j++) {
-        const target = this.board[r + i]?.[c + j];
-        if (target && !target.isRevealed && !target.isMine) {
-          target.isRevealed = true;
-          if (target.neighborMines === 0) this.revealEmpty(r + i, c + j);
-        }
-      }
-    }
+  checkWin() {
+    return this.board.every(row => 
+      row.every(cell => cell.isMine || cell.isRevealed)
+    );
   }
 
   startTimer() {
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-    }
-    this.timerInterval = setInterval(() => {
-      this.timer++;
-    }, 1000);
+    this.stopTimer();
+    this.timerInterval = setInterval(() => this.timer++, 1000);
   }
 
   stopTimer() {
@@ -185,19 +191,5 @@ export class GamePage implements OnInit {
     let count = 0;
     this.board.forEach(row => row.forEach(c => { if (c.isFlagged) count++; }));
     return count;
-  }
-
-  checkWin() {
-    const won = this.board.every(row => row.every(c => c.isMine || c.isRevealed));
-    if (won) this.endGame(true);
-  }
-
-  endGame(win: boolean) {
-    this.stopTimer();
-    this.gameOver = !win;
-    this.gameWon = win;
-    if (!win) {
-      this.board.forEach(row => row.forEach(c => { if (c.isMine) c.isRevealed = true; }));
-    }
   }
 }

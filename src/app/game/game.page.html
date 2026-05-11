@@ -43,7 +43,6 @@
              [style.grid-template-columns]="'repeat(' + difficulties[currentLevel].cols + ', 1fr)'">
           
           <ng-container *ngFor="let row of board; let r = index">
-            
             <div *ngFor="let cell of row; let c = index" 
                   class="game-cell"
                   [class.is-revealed]="cell.isRevealed"
@@ -64,12 +63,6 @@
           </ng-container>
         </div>
       </div>
-    </div>
-
-    <div class="game-actions">
-      <button class="btn-reset" (click)="resetGame()">
-        <ion-icon name="refresh-outline"></ion-icon> Permainan Baru
-      </button>
     </div>
   </div>
 </ion-content>

@@ -54,7 +54,7 @@
   gap: 15px;
 
   button {
-    border: none;
+    width: 100%;
     padding: 18px;
     border-radius: 16px;
     font-size: 1.1rem;
@@ -62,25 +62,46 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    transition: transform 0.2s;
+    gap: 12px;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
 
-    &:active { transform: scale(0.95); }
+    &:active {
+      transform: scale(0.96);
+    }
   }
 
   .btn-play {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    background: linear-gradient(135deg, #077960, #3eb4ac);
     color: white;
     box-shadow: 0 10px 20px rgba(7, 121, 96, 0.2);
   }
 
   .btn-info {
     background: white;
-    color: #475569;
+    color: #64748b;
     border: 1px solid #e2e8f0;
   }
-}
 
+  .btn-exit {
+    margin-top: 5px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    padding: 18px;
+    border-radius: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    &:active {
+      background: #fecaca;
+      transform: scale(0.95);
+    }
+  }
+}
 .home-footer {
   position: absolute;
   bottom: 20px;

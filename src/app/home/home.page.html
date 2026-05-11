@@ -3,7 +3,7 @@
     
     <div class="logo-container">
       <div class="icon-circle">
-        <ion-icon name="game-controller"></ion-icon>
+        <ion-icon name="game-controller"></ion-icon>  
       </div>
       <h1>Number Kaboom</h1>
       <p>Strategi dan Logika dalam Setiap Kotak</p>
@@ -19,6 +19,11 @@
         <ion-icon name="help-circle-outline"></ion-icon>
         Cara Bermain
       </button>
+
+      <button class="btn-exit" (click)="exitApp()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        Keluar Aplikasi
+      </button>
     </div>
 
     <ion-modal trigger="open-modal-guide" #modal>
@@ -28,23 +33,18 @@
             <h2>Panduan</h2>
             <ion-icon name="close-circle" (click)="modal.dismiss()"></ion-icon>
           </div>
-
-          <div class="instruction-card">
-            <p><strong>Tujuan:</strong> Buka semua kotak yang tidak berisi bom tanpa meledakkannya.</p>
+          <div class="instruction-content">
+            <p><strong>Tujuan:</strong> Buka semua kotak tanpa meledakkan bom.</p>
           </div>
-
           <ul class="guide-list">
-            <li><strong>Gali:</strong> Mode untuk membuka kotak.</li>
-            <li><strong>Bendera:</strong> Mode untuk menandai lokasi bom.</li>
-            <li><strong>Angka:</strong> Menunjukkan jumlah bom di sekitar kotak.</li>
+            <li><strong>Gali:</strong> Klik untuk membuka kotak.</li>
+            <li><strong>Bendera:</strong> Tandai kotak yang dicurigai bom.</li>
           </ul>
-
           <button class="btn-close-modal" (click)="modal.dismiss()">
             Saya Mengerti
           </button>
         </div>
       </ng-template>
     </ion-modal>
-
   </div>
 </ion-content>
