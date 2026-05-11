@@ -12,16 +12,13 @@
   overflow-x: auto;
   gap: 8px;
   padding-bottom: 8px;
-  
   &::-webkit-scrollbar { display: none; }
-
   ion-chip {
     --background: white;
     --color: #64748b;
     font-weight: 600;
     margin: 0;
     border: 1px solid #e2e8f0;
-
     &.active-chip {
       --background: #077960;
       --color: white;
@@ -33,7 +30,6 @@
 .stats-panel {
   display: flex;
   gap: 12px;
-  
   .stat-box {
     flex: 1;
     background: white;
@@ -41,22 +37,8 @@
     border-radius: 14px;
     text-align: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    border: 1px solid #f1f5f9;
-
-    .label {
-      display: block;
-      font-size: 0.7rem;
-      color: #94a3b8;
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    .value {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #1e293b;
-    }
+    .label { display: block; color: #64748b; font-size: 0.75rem; text-transform: uppercase; }
+    .value { color: #1e293b; font-size: 1.25rem; font-weight: 700; }
   }
 }
 
@@ -65,85 +47,65 @@
   background: #e2e8f0;
   padding: 4px;
   border-radius: 12px;
-  
   button {
     flex: 1;
+    padding: 10px;
     border: none;
-    padding: 12px;
-    border-radius: 10px;
+    border-radius: 8px;
     background: transparent;
     color: #64748b;
-    font-weight: 700;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all 0.2s ease;
-
-    &.active-mode {
-      background: white;
-      color: #077960;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    }
-
+    &.active-mode { background: white; color: #077960; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     ion-icon { font-size: 1.2rem; }
   }
 }
 
-/* CONTAINER PAPAN - Diperbaiki agar pas layar */
 .board-container {
+  flex: 1;
   background: #cbd5e1;
   padding: 8px;
   border-radius: 16px;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-  overflow: hidden; 
+  justify-content: center;
 }
 
 .board-scroll {
   width: 100%;
+  height: 100%;
+  overflow: auto;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30px, 1fr)); /* Responsif dengan ukuran minimum */
-  gap: 3px; 
+  gap: 4px;
+  padding: 4px;
   background: #94a3b8;
-  padding: 3px;
-  border-radius: 4px;
-  width: 100%; 
-  max-width: 100%;
+  border-radius: 8px;
 }
 
 .game-cell {
-  aspect-ratio: 1/1;
-  width: 100%; 
+  width: 40px;
+  height: 40px;
   background: #e2e8f0;
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-weight: 900;
-  font-size: 1.2rem; /* Font responsif agar tidak meluber */
-  border-radius: 2px;
-  transition: transform 0.1s;
-
-  &:active { transform: scale(0.9); }
-
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  border-radius: 4px;
   &.is-revealed {
-    background: #ffffff;
+    background: white;
     &.is-mine { background: #fee2e2; }
-
-    .mine-number {
-      line-height: 1;
-    }
   }
-
   .mine-number {
     &[data-num="1"] { color: #2563eb; }
     &[data-num="2"] { color: #16a34a; }
@@ -151,9 +113,17 @@
     &[data-num="4"] { color: #1e1b4b; }
     &[data-num="5"] { color: #7c2d12; }
   }
+  .mine-icon { color: #dc2626; }
+  .flag-icon { color: #f59e0b; }
+}
 
-  .mine-icon { color: #dc2626; font-size: 1.1rem; }
-  .flag-icon { color: #f59e0b; font-size: 1.1rem; }
+.game-alert-win {
+  --header-color: #077960;
+  button { color: #077960 !important; font-weight: bold; }
+}
+.game-alert-lose {
+  --header-color: #dc2626;
+  button { color: #dc2626 !important; font-weight: bold; }
 }
 
 .game-actions {
