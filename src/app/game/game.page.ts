@@ -67,28 +67,44 @@ export class GamePage implements OnInit {
   }
 
   handleCellClick(cell: Cell, r: number, c: number) {
-    if (this.gameOver || this.gameWon || cell.isRevealed) return;
+  if (this.gameOver || this.gameWon || cell.isRevealed) return;
 
-    if (this.isFlagMode) {
-      cell.isFlagged = !cell.isFlagged;
+  if (this.isFlagMode) {
+    const currentFlags = this.getFlagsCount();
+    const maxFlags = this.difficulties[this.currentLevel].mines;
+
+    if (cell.isFlagged) {
+      cell.isFlagged = false;
       return;
     }
 
-    if (cell.isFlagged) return;
-
-    if (this.isFirstClick) {
-      this.placeMines(r, c);
-      this.startTimer();
-      this.isFirstClick = false;
+    if (currentFlags < maxFlags) {
+      cell.isFlagged = true;
+    } else {
+      console.log('Bendera sudah mencapai batas maksimal!');
     }
 
-    if (cell.isMine) {
-      this.endGame(false);
-    } else {
-      this.revealCell(r, c);
-      if (this.checkWin()) this.endGame(true);
+    return;
+  }
+
+  if (cell.isFlagged) return;
+
+  if (this.isFirstClick) {
+    this.placeMines(r, c);
+    this.startTimer();
+    this.isFirstClick = false;
+  }
+
+  if (cell.isMine) {
+    this.endGame(false);
+  } else {
+    this.revealCell(r, c);
+
+    if (this.checkWin()) {
+      this.endGame(true);
     }
   }
+}
 
   revealCell(r: number, c: number) {
     const cell = this.board[r]?.[c];
@@ -144,8 +160,10 @@ export class GamePage implements OnInit {
     }
 
     const alert = await this.alertCtrl.create({
-      header: win ? 'Yatta, Selamat kamu berhasil!' : 'Yahh, Game Over coba lagi deh',
-      subHeader: win ? 'Kamu berhasil membersihkan semua bom' : 'Waduh, kamu menginjak bom',
+      header: win ? 'Victory!' : 'Game Over',
+      subHeader: win
+      ? 'Yatta, kamu menang'
+      : 'Haduh.. coba lagi deh',
       message: `Waktu kamu: ${this.formatTime(this.timer)}`,
       backdropDismiss: false,
       cssClass: win ? 'game-alert-win' : 'game-alert-lose',
